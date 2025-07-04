@@ -1,4 +1,8 @@
 package com.rubenialima.picpay.repository;
 
-public class WalletRepository {
+import com.rubenialima.picpay.entity.Wallet;
+import com.rubenialima.picpay.entity.WalletType;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface WalletRepository extends JpaRepository<Wallet, Long> {
 }
