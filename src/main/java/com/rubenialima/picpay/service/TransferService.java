@@ -2,6 +2,8 @@ package com.rubenialima.picpay.service;
 
 import com.rubenialima.picpay.controller.dto.TransferDto;
 import com.rubenialima.picpay.entity.Transfer;
+import com.rubenialima.picpay.entity.Wallet;
+import com.rubenialima.picpay.exception.WalletNotFoundException;
 import com.rubenialima.picpay.repository.TransferRepository;
 import com.rubenialima.picpay.repository.WalletRepository;
 import jakarta.validation.Valid;
@@ -24,8 +26,20 @@ public class TransferService {
     }
 
 
-    public Transfer  transfer( TransferDto dto) {
+    public Transfer  transfer( TransferDto transferDto) {
+        var sender= walletRepository.findById(transferDto.payer())
+                 .orElseThrow(()-> new WalletNotFoundException(transferDto.payer()));
 
+        var receiver= walletRepository.findById(transferDto.payee())
+                .orElseThrow((()-> new WalletNotFoundException(transferDto.payee())));
+
+        validateTransfer(transferDto, sender);
         return null;
+    }
+
+    private void validateTransfer(TransferDto transferDto, Wallet sender) {
+        if(!sender.isTransferAllowesForWalletType()){
+            throw new TransferNotAllowedForWalletTypeException();
+        }
     }
 }

@@ -45,6 +45,10 @@ public class Wallet {
         this.walletType = walletType;
     }
 
+    public boolean isTransferAllowesForWalletType() {
+        return this.walletType.equals(WalletType.Enum.USER.get());
+    }
+
     public Long getId() {
         return id;
     }
@@ -100,4 +104,6 @@ public class Wallet {
     public void setWalletType(WalletType walletType) {
         this.walletType = walletType;
     }
+
+
 }
