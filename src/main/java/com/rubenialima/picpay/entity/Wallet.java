@@ -2,6 +2,8 @@ package com.rubenialima.picpay.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -47,6 +49,10 @@ public class Wallet {
 
     public boolean isTransferAllowesForWalletType() {
         return this.walletType.equals(WalletType.Enum.USER.get());
+    }
+
+    public boolean isBalanceEqualOrGreaterThan(BigDecimal value) {
+        return this.balance.doubleValue()>=value.doubleValue();
     }
 
     public Long getId() {
@@ -104,6 +110,7 @@ public class Wallet {
     public void setWalletType(WalletType walletType) {
         this.walletType = walletType;
     }
+
 
 
 }

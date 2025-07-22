@@ -3,6 +3,8 @@ package com.rubenialima.picpay.service;
 import com.rubenialima.picpay.controller.dto.TransferDto;
 import com.rubenialima.picpay.entity.Transfer;
 import com.rubenialima.picpay.entity.Wallet;
+import com.rubenialima.picpay.exception.InsufficientBalanceExpception;
+import com.rubenialima.picpay.exception.TransferNotAllowedForWalletTypeException;
 import com.rubenialima.picpay.exception.WalletNotFoundException;
 import com.rubenialima.picpay.repository.TransferRepository;
 import com.rubenialima.picpay.repository.WalletRepository;
@@ -40,6 +42,9 @@ public class TransferService {
     private void validateTransfer(TransferDto transferDto, Wallet sender) {
         if(!sender.isTransferAllowesForWalletType()){
             throw new TransferNotAllowedForWalletTypeException();
+        }
+        if(!sender.isBalanceEqualOrGreaterThan(transferDto.value())){
+            throw new InsufficientBalanceExpception();
         }
     }
 }
