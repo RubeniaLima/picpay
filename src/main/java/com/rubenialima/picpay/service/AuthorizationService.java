@@ -1,7 +1,7 @@
 package com.rubenialima.picpay.service;
 
 import com.rubenialima.picpay.client.AuthorizationClient;
-import com.rubenialima.picpay.entity.Transfer;
+import com.rubenialima.picpay.controller.dto.TransferDto;
 import com.rubenialima.picpay.exception.PicpayException;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class AuthorizationService {
         this.authorizationClient = authorizationClient;
     }
 
-    public boolean isAuthorized(Transfer transfer){
+    public boolean isAuthorized(TransferDto transfer){
 
         var resp = authorizationClient.isAuthorized();
 

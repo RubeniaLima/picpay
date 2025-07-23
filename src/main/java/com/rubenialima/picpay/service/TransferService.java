@@ -5,6 +5,7 @@ import com.rubenialima.picpay.entity.Transfer;
 import com.rubenialima.picpay.entity.Wallet;
 import com.rubenialima.picpay.exception.InsufficientBalanceExpception;
 import com.rubenialima.picpay.exception.TransferNotAllowedForWalletTypeException;
+import com.rubenialima.picpay.exception.TransferNotAuthorizedException;
 import com.rubenialima.picpay.exception.WalletNotFoundException;
 import com.rubenialima.picpay.repository.TransferRepository;
 import com.rubenialima.picpay.repository.WalletRepository;
@@ -44,7 +45,11 @@ public class TransferService {
             throw new TransferNotAllowedForWalletTypeException();
         }
         if(!sender.isBalanceEqualOrGreaterThan(transferDto.value())){
-            throw new InsufficientBalanceExpception();
+            throw new InsufficientBalanceExpception( );
+        }
+
+        if(! authorizationService.isAuthorized(transferDto)){
+            throw new TransferNotAuthorizedException();
         }
     }
 }
