@@ -37,6 +37,9 @@ public class TransferService {
                 .orElseThrow((()-> new WalletNotFoundException(transferDto.payee())));
 
         validateTransfer(transferDto, sender);
+
+        sender.debit(transferDto.value());
+        receiver.credit(transferDto.value());
         return null;
     }
 
