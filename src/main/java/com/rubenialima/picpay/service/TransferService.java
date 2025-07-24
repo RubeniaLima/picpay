@@ -40,7 +40,14 @@ public class TransferService {
 
         sender.debit(transferDto.value());
         receiver.credit(transferDto.value());
-        return null;
+
+        var transfer = new Transfer(sender,receiver,transferDto.value());
+
+        walletRepository.save(sender);
+        walletRepository.save(receiver);
+        var transferResult =transferRepository.save(transfer);
+
+        return transferResult;
     }
 
     private void validateTransfer(TransferDto transferDto, Wallet sender) {
