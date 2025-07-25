@@ -9,9 +9,12 @@ import com.rubenialima.picpay.exception.TransferNotAuthorizedException;
 import com.rubenialima.picpay.exception.WalletNotFoundException;
 import com.rubenialima.picpay.repository.TransferRepository;
 import com.rubenialima.picpay.repository.WalletRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class TransferService {
@@ -28,7 +31,7 @@ public class TransferService {
         this.walletRepository = walletRepository;
     }
 
-
+    @Transactional
     public Transfer  transfer( TransferDto transferDto) {
         var sender= walletRepository.findById(transferDto.payer())
                  .orElseThrow(()-> new WalletNotFoundException(transferDto.payer()));
@@ -46,6 +49,8 @@ public class TransferService {
         walletRepository.save(sender);
         walletRepository.save(receiver);
         var transferResult =transferRepository.save(transfer);
+
+        CompletableFuture.runAsync(() ->notificationService.sendNotification(transferResult));
 
         return transferResult;
     }
